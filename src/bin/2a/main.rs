@@ -7,7 +7,10 @@ fn main() {
     let mut safe_level_count: u32 = 0;
 
     for line in lines {
-        let levels: Vec<i32> = line.split_whitespace().map(|s| s.parse().unwrap_or_default()).collect();
+        let levels: Vec<i32> = line
+            .split_whitespace()
+            .map(|s| s.parse().unwrap_or_default())
+            .collect();
         if levels.len() == 0 {
             continue;
         }

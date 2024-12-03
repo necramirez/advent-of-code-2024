@@ -23,7 +23,10 @@ fn main() {
     let mut safe_level_count: u32 = 0;
 
     for line in lines {
-        let levels: Vec<i32> = line.split_whitespace().map(|s| s.parse().unwrap_or_default()).collect();
+        let levels: Vec<i32> = line
+            .split_whitespace()
+            .map(|s| s.parse().unwrap_or_default())
+            .collect();
         if levels.len() == 0 {
             continue;
         }
@@ -36,7 +39,7 @@ fn main() {
 
         'inner: for i in 0..levels.len() {
             let mut cloned = levels.clone();
-            cloned.drain(i..i+1);
+            cloned.drain(i..i + 1);
 
             let diffs = get_intervals(&cloned);
             if is_all_good(&diffs) {

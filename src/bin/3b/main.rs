@@ -5,23 +5,63 @@ fn main() {
 
     let mut sum_of_products: usize = 0;
 
+    const MUL_TOKEN: &str = "mul(";
+    const DO_TOKEN: &str = "do()";
+    const DONT_TOKEN: &str = "don't()";
+
     const SMALLEST_MUL_WINDOW: usize = "mul(1,1)".len();
-    const MUL_WINDOW: usize = "mul(".len();
+    const MUL_WINDOW: usize = MUL_TOKEN.len();
     let mut mul_w1: usize = 0;
     let mut mul_w2: usize = mul_w1 + MUL_WINDOW;
 
-    const DEBUG: bool = false;
+    const DEBUG: bool = true;
     let mut mul_count: usize = 0;
 
+    let mut mul_enabled = true;
+    let mut needle = MUL_TOKEN;
+    // const DO_WINDOW: usize = "do()".len(); // not needed, same as MUL_WINDOW
+    const DONT_WINDOW: usize = DONT_TOKEN.len();
+
     while mul_w1 < data.len() - SMALLEST_MUL_WINDOW {
+        if mul_enabled {
+            if DEBUG {
+                println!(
+                    "Checking for '{}'... {}",
+                    DONT_TOKEN,
+                    &data[mul_w1..mul_w1 + DONT_WINDOW]
+                );
+            }
+            if mul_enabled && &data[mul_w1..mul_w1 + DONT_WINDOW] == DONT_TOKEN {
+                if DEBUG {
+                    println!("Disabling...");
+                }
+                mul_enabled = false;
+                needle = DO_TOKEN;
+                mul_w1 += DONT_WINDOW;
+                mul_w2 = mul_w1 + MUL_WINDOW;
+                continue;
+            }
+        }
+
         let slice = &data[mul_w1..mul_w2];
 
         if DEBUG {
-            println!("Looking for 'mul('... {}", slice);
+            println!("Looking for '{}'... {}", needle, slice);
         }
 
-        if slice != "mul(" {
+        if slice != needle {
             mul_w1 += 1;
+            mul_w2 = mul_w1 + MUL_WINDOW;
+            continue;
+        }
+
+        if !mul_enabled {
+            if DEBUG {
+                println!("Enabling...");
+            }
+            mul_enabled = true;
+            needle = MUL_TOKEN;
+            mul_w1 += MUL_WINDOW;
             mul_w2 = mul_w1 + MUL_WINDOW;
             continue;
         }
@@ -77,7 +117,7 @@ fn main() {
         sum_of_products += digit1 * digit2;
         mul_count += 1;
 
-        // if DEBUG && mul_count > 100 {
+        // if DEBUG && mul_count > 10 {
         //     break;
         // }
 
