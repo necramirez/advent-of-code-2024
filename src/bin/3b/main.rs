@@ -14,7 +14,7 @@ fn main() {
     let mut mul_w1: usize = 0;
     let mut mul_w2: usize = mul_w1 + MUL_WINDOW;
 
-    const DEBUG: bool = true;
+    const DEBUG: bool = false;
     let mut mul_count: usize = 0;
 
     let mut mul_enabled = true;
